@@ -2,20 +2,21 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import axios from 'axios';
 
-export default function Home() {
+export default function Home({ apiBaseUrl }) {
   const [message, setMessage] = useState('Loading...');
   const [status, setStatus] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log('Using Backend URL:', apiBaseUrl);
         // First check if backend is healthy
-        const healthCheck = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/health`);
-        
+        const healthCheck = await axios.get(`${apiBaseUrl}/api/health`);
+
         if (healthCheck.data.status === 'healthy') {
           setStatus('Backend is connected!');
           // Then fetch the message
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/message`);
+          const response = await axios.get(`${apiBaseUrl}/api/message`);
           setMessage(response.data.message);
         }
       } catch (error) {
@@ -25,8 +26,13 @@ export default function Home() {
       }
     };
 
-    fetchData();
-  }, []);
+    if (apiBaseUrl) {
+      fetchData();
+    } else {
+      setMessage('API URL not configured');
+      setStatus('Configuration Error');
+    }
+  }, [apiBaseUrl]);
 
   return (
     <div className="container">
@@ -46,7 +52,7 @@ export default function Home() {
           <p>{message}</p>
         </div>
         <div className="info">
-          <p>Backend URL: {process.env.NEXT_PUBLIC_API_URL}</p>
+          <p>Backend URL: {apiBaseUrl || 'Not Set'}</p>
         </div>
       </main>
 
@@ -106,4 +112,13 @@ export default function Home() {
       `}</style>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  // This runs on the server (Cloud Run) at runtime, so it CAN see the environment variable
+  return {
+    props: {
+      apiBaseUrl: process.env.NEXT_PUBLIC_API_URL || null,
+    },
+  };
 }
