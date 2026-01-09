@@ -31,7 +31,6 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
-      uses: aws-actions/amazon-ecr-login@v2
 
 
     - name: Build and push Backend to ECR
@@ -74,6 +73,21 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         
+      - name: Terraform Init GCP
+        run: |
+          cd terraform/gcp
+          terraform init
+          
+      - name: Terraform Apply GCP
+        run: |
+          cd terraform/gcp
+          terraform apply -auto-approve
+        env:
+          TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+          TF_VAR_alert_email: ${{ secrets.ALERT_EMAIL }}
+          TF_VAR_database_secret: ${{ secrets.DATABASE_SECRET }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+
       - name: Terraform Init AWS
         run: |
           cd terraform/aws
@@ -89,20 +103,4 @@ jobs:
           TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-
-      - name: Terraform Init GCP
-        run: |
-          cd terraform/gcp
-          terraform init
-          
-      - name: Terraform Apply GCP
-        run: |
-          cd terraform/gcp
-          terraform apply -auto-approve
-        env:
-          TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
-          TF_VAR_alert_email: ${{ secrets.ALERT_EMAIL }}
-          TF_VAR_database_secret: ${{ secrets.DATABASE_SECRET }}
-          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 

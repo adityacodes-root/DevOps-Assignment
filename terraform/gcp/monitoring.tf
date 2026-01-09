@@ -1,5 +1,7 @@
 resource "google_monitoring_notification_channel" "email" {
   display_name = "DevOps Alert Email"
+  type         = "email"
+  labels = {
     email_address = var.alert_email
   }
 }
