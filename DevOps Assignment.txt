@@ -1,0 +1,234 @@
+﻿DevOps Assignment
+📌 Overview
+In this assignment, candidates will demonstrate end-to-end DevOps skills by running, containerizing, testing, deploying, and operating a simple two-tier web application (Python backend + Next.js frontend).
+The application must be deployed on at least TWO cloud platforms out of:
+* AWS
+* Google Cloud Platform (GCP)
+* Microsoft Azue
+All infrastructure and workflows must be automated using Git, Docker, CI/CD pipelines, Terraform, and must include monitoring, security, and load balancing.
+You can find the code base to be hosted here: Codebase
+________________
+
+
+🎯 Learning Objectives
+By completing this assignment, candidates should demonstrate the ability to:
+* Use Git effectively (branching strategies, PRs, meaningful commits)
+* Containerize applications using Docker best practices
+* Design and implement CI/CD pipelines
+* Provision cloud infrastructure using Terraform (multi-cloud)
+* Deploy containerized workloads using managed container services
+* Configure monitoring, alerting, and logging
+* Apply security best practices (IAM, secrets, network controls)
+* Validate load balancing and high availability
+
+________________
+
+
+🛠️ Pre-Requisites
+Languages & Frameworks
+   * Backend: Python (Flask or FastAPI)
+   * Frontend: Next.js
+Tools
+   * Git & GitHub (or GitLab)
+   * Docker & Docker Compose
+   * Terraform
+   * Cloud CLI tools (AWS CLI / gcloud / Azure CLI)
+   * CI/CD (GitHub Actions / GitLab CI)
+Knowledge
+   * Linux basics
+   * REST APIs & HTTP
+   * Containers & cloud fundamentals
+
+________________
+
+
+🔍 Assignment Tasks
+1️⃣ Version Control Expectations
+Candidates must:
+      * Use the provided repository as the starting point
+      * Maintain the original project structure and extend it as needed
+      * Follow a clear branching strategy, for example:
+      * main – production-ready code
+      * develop – integration branch
+      * feature/* – feature or task branches
+      * Use Pull Requests to merge changes into develop and main
+      * Write clear, meaningful commit messages
+      * Avoid pushing all changes directly to main
+❌ Disallowed Practices
+      * Submitting code as a ZIP file
+      * Uploading screenshots instead of Git history
+      * Single-commit repositories with no meaningful history
+      * Replacing the repository entirely instead of extending it
+
+2️⃣ Run & Containerize
+Backend
+         * Simple REST API:
+         * /health
+         * /api/message
+         * Write at least 2 unit tests
+         * Dockerize using a multi-stage Dockerfile
+         * Follow container best practices:
+         * Small image size
+         * Non-root user
+         * Environment-based config
+Frontend
+         * Next.js UI that calls backend APIs
+         * Write at least 2 end-to-end tests (Jest / Cypress / Playwright)
+         * Dockerize using a multi-stage Dockerfile
+3️⃣ CI/CD Pipeline
+Configure CI/CD (GitHub Actions preferred):
+On every push to develop:
+         * Checkout code
+         * Run backend tests
+         * Run frontend tests
+         * Build Docker images
+         * Tag images using Git SHA
+         * Push images to container registries:
+         * AWS ECR / GCP Artifact Registry / Azure ACR
+On merge to main:
+         * Automatically deploy to at least 2 cloud platforms
+         * Zero manual steps post-merge
+
+4️⃣ Infrastructure as Code (Multi-Cloud)
+Candidates must deploy to any TWO of the following:
+☁️ AWS (Example)
+            * ECS (Fargate) + Application Load Balancer
+            * VPC, subnets, security groups
+            * IAM roles with least privilege
+            * Secrets Manager
+☁️ GCP (Example)
+            * GKE or Cloud Run
+            * VPC networking
+            * IAM service accounts
+            * Secret Manager
+☁️ Azure (Example)
+            * Azure Container Apps or AKS
+            * VNet + NSGs
+            * Managed identities
+            * Azure Key Vault
+Requirements
+            * All infrastructure must be provisioned using Terraform
+            * Reusable and modular Terraform structure preferred
+            * No manual resource creation
+
+5️⃣ Monitoring & Alerting
+For each deployed cloud platform:
+               * Configure monitoring dashboards showing:
+               * CPU usage
+               * Memory usage
+               * Request count / latency
+               * Create at least one alert:
+               * Example: CPU > 70% for 5 minutes
+               * Alert must notify via:
+               * Email / Slack / equivalent
+6️⃣ Security & IAM
+               * Use least-privilege IAM roles / service accounts
+
+               * Store secrets in:
+
+                  * AWS Secrets Manager
+
+                  * GCP Secret Manager
+
+                  * Azure Key Vault
+
+                     * No secrets in:
+
+                        * Git repo
+
+                        * Docker images
+
+                        * CI logs
+
+                           * Document:
+
+                              * Ingress / egress rules
+
+                              * Public vs private services
+
+
+7️⃣ Load Balancing & Resiliency
+                                 * Run a minimum of 2 container instances per service
+                                 * Demonstrate:
+                                 * Traffic distribution via Load Balancer
+                                 * One instance being stopped or deregistered
+                                 * Application remains available (no downtime)
+
+________________
+
+
+📦 Deliverables
+Mandatory:
+                                    * GitHub repository with:
+                                    * Source code
+                                    * Dockerfiles
+                                    * Terraform configs
+                                    * CI/CD workflows
+                                    * README.md
+
+                                       * Hosted URLs:
+                                       * Frontend & backend for each cloud
+
+                                          * Demo Video (5–8 minutes) covering:
+                                          * Architecture
+                                          * Git workflow
+                                          * Dockerization
+                                          * CI/CD
+                                          * Terraform
+                                          * Monitoring & alerts
+                                          * Security
+                                          * Load balancing test
+Evidence:
+                                          * CI/CD logs
+                                          * Terraform apply output or state
+                                          * Monitoring dashboards screenshots
+                                          * Secret retrieval proof (non-sensitive)
+
+________________
+
+
+✅ Submission Checklist
+                                             * README.md with clear instructions
+                                             * Backend & frontend tests passing
+                                             * Docker images built & pushed
+                                             * Deployed on at least 2 cloud platforms
+                                             * Terraform-only provisioning
+                                             * Automated CI/CD deployments
+                                             * Monitoring dashboards & alerts
+                                             * Secure secrets & IAM roles
+                                             * Demo video included
+________________
+
+
+🏆 Grading Rubric
+
+
+Criteria
+	Weight
+	Version Control & Documentation
+	10%
+	Dockerization
+	15%
+	CI/CD Automation
+	20%
+	Multi-Cloud Terraform (2 Clouds)
+	25%
+	Monitoring & Alerting
+	10%
+	Security & IAM
+	5%
+	Load Balancing & Resiliency
+	10%
+	Demo Video & Presentation
+	5%
+	________________
+
+
+Deadline: 3 days / 11-Jan-2026
+Good luck, and happy DevOps’ing!
+________________
+
+
+Note on Cloud Platform Usage:
+This assignment involves deploying resources on cloud platforms such as AWS, GCP, or Azure. Please note that any costs incurred during this process are the candidate’s responsibility. PGAGI will not bear or reimburse any cloud-related expenses.
+Candidates are encouraged to leverage free-tier services and to tear down all resources once the assignment is complete.

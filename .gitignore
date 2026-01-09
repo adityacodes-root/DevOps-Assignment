@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+
+# Environment Variables
+.env
+.env.local
+
+# Build outputs
+.next/
+backend/wheels/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+
+# Editor/IDE
+.vscode/
+.idea/
