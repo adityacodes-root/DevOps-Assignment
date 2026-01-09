@@ -45,12 +45,6 @@ resource "aws_ecs_service" "backend" {
     security_groups  = [aws_security_group.ecs_tasks_sg.id]
     assign_public_ip = true
   }
-
-  load_balancer {
-    target_group_arn = aws_lb_target_group.backend.arn
-    container_name   = "backend"
-    container_port   = 8000
-  }
 }
 
 resource "aws_ecs_task_definition" "frontend" {
@@ -69,7 +63,7 @@ resource "aws_ecs_task_definition" "frontend" {
       environment = [
         {
           name  = "NEXT_PUBLIC_API_URL"
-          value = "http://${aws_lb.main.dns_name}/api" # Point to ALB
+          value = "http://localhost:8000/api" # Placeholder since no ALB
         }
       ]
       portMappings = [
@@ -101,12 +95,6 @@ resource "aws_ecs_service" "frontend" {
     subnets          = [aws_subnet.public_1.id, aws_subnet.public_2.id]
     security_groups  = [aws_security_group.ecs_tasks_sg.id]
     assign_public_ip = true
-  }
-
-  load_balancer {
-    target_group_arn = aws_lb_target_group.frontend.arn
-    container_name   = "frontend"
-    container_port   = 3000
   }
 }
 
