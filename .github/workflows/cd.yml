@@ -34,6 +34,11 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
 
 
+    - name: Create ECR Repositories if missing
+      run: |
+        aws ecr describe-repositories --repository-names ${{ env.ECR_REPOSITORY }} || aws ecr create-repository --repository-name ${{ env.ECR_REPOSITORY }}
+        aws ecr describe-repositories --repository-names devops-frontend || aws ecr create-repository --repository-name devops-frontend
+
     - name: Build and push Backend to ECR
       if: steps.login-ecr.outcome == 'success'
       uses: docker/build-push-action@v5
