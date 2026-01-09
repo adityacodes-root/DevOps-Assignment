@@ -93,7 +93,10 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
+    - name: Create ECR Repository if missing
+      run: aws ecr describe-repositories --repository-names devops-backend || aws ecr create-repository --repository-name devops-backend
 
+    # Build & Push (AWS)
     - name: Build and push Backend to ECR
       uses: docker/build-push-action@v5
       with:
@@ -153,7 +156,10 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
+    - name: Create ECR Repository if missing
+      run: aws ecr describe-repositories --repository-names devops-frontend || aws ecr create-repository --repository-name devops-frontend
 
+    # Build & Push (AWS)
     - name: Build and push Frontend to ECR
       uses: docker/build-push-action@v5
       with:
