@@ -39,7 +39,9 @@ jobs:
       with:
         context: ./backend
         push: true
-        tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+        tags: |
+          ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
 
     # --- GCP Login & Push ---
     - name: Google Auth
@@ -66,7 +68,9 @@ jobs:
       with:
         context: ./backend
         push: true
-        tags: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCR_REPOSITORY }}:${{ github.sha }}
+        tags: |
+          gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCR_REPOSITORY }}:${{ github.sha }}
+          gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCR_REPOSITORY }}:latest
 
   deploy-terraform:
     needs: build-and-push
