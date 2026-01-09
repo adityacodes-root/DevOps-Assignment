@@ -14,7 +14,7 @@ resource "aws_ecs_task_definition" "backend" {
   container_definitions = jsonencode([
     {
       name  = "backend"
-      image = "${var.ecr_repository_url}/devops-backend:latest" # Placeholder variable
+      image = "${var.ecr_repository_url}/devops-backend:latest"
       portMappings = [
         {
           containerPort = 8000
@@ -65,7 +65,7 @@ resource "aws_ecs_task_definition" "frontend" {
   container_definitions = jsonencode([
     {
       name  = "frontend"
-      image = "${var.ecr_repository_url}/devops-frontend:latest" # Placeholder variable
+      image = "${var.ecr_repository_url}/devops-frontend:latest"
       environment = [
         {
           name  = "NEXT_PUBLIC_API_URL"

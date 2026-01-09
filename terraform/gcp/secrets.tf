@@ -7,7 +7,7 @@ resource "google_secret_manager_secret" "app_secret" {
 
 resource "google_secret_manager_secret_version" "app_secret_val" {
   secret = google_secret_manager_secret.app_secret.id
-  secret_data = "super-secret-key"
+  secret_data = var.database_secret
 }
 
 # Grant access to Cloud Run service account (default compute SA for simplicity, or creating a new one is better)

@@ -5,5 +5,10 @@ variable "aws_region" {
 
 variable "ecr_repository_url" {
   description = "Base URL for ECR repository"
-  # This would typically be passed via -var "ecr_repository_url=..."
+}
+
+variable "db_password" {
+  description = "Database password or API key"
+  type        = string
+  sensitive   = true
 }

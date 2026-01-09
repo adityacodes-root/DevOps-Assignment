@@ -1,11 +1,11 @@
 resource "aws_secretsmanager_secret" "app_secret" {
   name = "devops-app-secret"
-  description = "Example application secret"
+  description = "Application configuration secrets"
 }
 
 resource "aws_secretsmanager_secret_version" "app_secret_val" {
   secret_id     = aws_secretsmanager_secret.app_secret.id
-  secret_string = jsonencode({"API_KEY" = "super-secret-key"})
+  secret_string = jsonencode({"API_KEY" = var.db_password})
 }
 
 # Grant ECS execution role access to secrets

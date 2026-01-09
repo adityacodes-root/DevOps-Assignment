@@ -1,8 +1,6 @@
 resource "google_monitoring_notification_channel" "email" {
   display_name = "DevOps Alert Email"
-  type         = "email"
-  labels = {
-    email_address = "fake-email@example.com" # Placeholder
+    email_address = var.alert_email
   }
 }
 
@@ -19,7 +17,7 @@ resource "google_monitoring_alert_policy" "high_latency" {
         alignment_period   = "60s"
         per_series_aligner = "ALIGN_PERCENTILE_99"
       }
-      threshold_value = 2000 # 2 seconds (in ms or s? usually distribution, let's assume 2000ms if Unit is ms, but Cloud Run metric might be ms. Check docs: run.googleapis.com/request_latencies is in ms.)
+      threshold_value = 2000
     }
   }
 
