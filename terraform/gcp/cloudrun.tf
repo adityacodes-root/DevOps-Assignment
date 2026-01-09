@@ -4,9 +4,6 @@ resource "google_cloud_run_v2_service" "backend" {
   ingress = "INGRESS_TRAFFIC_ALL"
 
   template {
-    scaling {
-      min_instance_count = 2
-    }
     containers {
       image = "gcr.io/${var.project_id}/devops-backend:latest"
       ports {
@@ -33,9 +30,6 @@ resource "google_cloud_run_v2_service" "frontend" {
   ingress = "INGRESS_TRAFFIC_ALL"
 
   template {
-    scaling {
-      min_instance_count = 2
-    }
     containers {
       image = "gcr.io/${var.project_id}/devops-frontend:latest"
       ports {

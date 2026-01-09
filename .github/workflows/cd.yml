@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: us-east-1
+  AWS_REGION: us-east-2
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   ECR_REPOSITORY: devops-backend
   GCR_REPOSITORY: devops-backend
@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-
+    # --- AWS Login & Push ---
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -34,11 +34,6 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
 
 
-    - name: Create ECR Repositories if missing
-      run: |
-        aws ecr describe-repositories --repository-names ${{ env.ECR_REPOSITORY }} || aws ecr create-repository --repository-name ${{ env.ECR_REPOSITORY }}
-        aws ecr describe-repositories --repository-names devops-frontend || aws ecr create-repository --repository-name devops-frontend
-
     - name: Build and push Backend to ECR
       if: steps.login-ecr.outcome == 'success'
       uses: docker/build-push-action@v5
@@ -47,7 +42,7 @@ jobs:
         push: true
         tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
 
-
+    # --- GCP Login & Push ---
     - name: Google Auth
       uses: google-github-actions/auth@v2
       with:
@@ -56,10 +51,6 @@ jobs:
 
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
-      continue-on-error: true
-
-    - name: Enable Artifact Registry API
-      run: gcloud services enable artifactregistry.googleapis.com
       continue-on-error: true
 
     - name: Configure Docker for GCP
@@ -73,22 +64,6 @@ jobs:
         context: ./backend
         push: true
         tags: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCR_REPOSITORY }}:${{ github.sha }}
-
-    - name: Build and push Frontend to ECR
-      if: steps.login-ecr.outcome == 'success'
-      uses: docker/build-push-action@v5
-      with:
-        context: ./frontend
-        push: true
-        tags: ${{ steps.login-ecr.outputs.registry }}/devops-frontend:${{ github.sha }}
-
-    - name: Build and push Frontend to GCR
-      if: env.GCP_PROJECT_ID != ''
-      uses: docker/build-push-action@v5
-      with:
-        context: ./frontend
-        push: true
-        tags: gcr.io/${{ env.GCP_PROJECT_ID }}/devops-frontend:${{ github.sha }}
 
   deploy-terraform:
     needs: build-and-push

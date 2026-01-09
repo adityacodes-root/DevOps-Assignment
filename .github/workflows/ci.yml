@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [ "develop", "main" ]
 
-env:
-  AWS_REGION: us-east-1
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-
 jobs:
   test-backend:
     runs-on: ubuntu-latest
@@ -57,133 +53,31 @@ jobs:
   build-docker-backend:
     needs: [test-backend]
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
     - uses: actions/checkout@v4
-    
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
-
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
-
-
-    - name: Google Auth
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-      continue-on-error: true
-
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-      continue-on-error: true
-
-    - name: Enable Artifact Registry API
-      run: gcloud services enable artifactregistry.googleapis.com
-      continue-on-error: true
-
-    - name: Configure Docker for GCP
-      run: gcloud auth configure-docker
-      continue-on-error: true
     
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    - name: Create ECR Repository if missing
-      run: aws ecr describe-repositories --repository-names devops-backend || aws ecr create-repository --repository-name devops-backend
-
-    # Build & Push (AWS)
-    - name: Build and push Backend to ECR
+    - name: Build Backend Image
       uses: docker/build-push-action@v5
       with:
         context: ./backend
-        push: true
-        tags: |
-          ${{ steps.login-ecr.outputs.registry }}/devops-backend:${{ github.sha }}
-          ${{ steps.login-ecr.outputs.registry }}/devops-backend:dev
-
-
-    - name: Build and push Backend to GCR
-      if: env.GCP_PROJECT_ID != ''
-      uses: docker/build-push-action@v5
-      with:
-        context: ./backend
-        push: true
-        tags: |
-          gcr.io/${{ secrets.GCP_PROJECT_ID }}/devops-backend:${{ github.sha }}
-          gcr.io/${{ secrets.GCP_PROJECT_ID }}/devops-backend:dev
+        push: false
+        tags: backend:test
 
   build-docker-frontend:
     needs: [test-frontend]
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
     - uses: actions/checkout@v4
-    
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
-
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
-
-
-    - name: Google Auth
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-      continue-on-error: true
-
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-      continue-on-error: true
-
-    - name: Enable Artifact Registry API
-      run: gcloud services enable artifactregistry.googleapis.com
-      continue-on-error: true
-
-    - name: Configure Docker for GCP
-      run: gcloud auth configure-docker
-      continue-on-error: true
     
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    - name: Create ECR Repository if missing
-      run: aws ecr describe-repositories --repository-names devops-frontend || aws ecr create-repository --repository-name devops-frontend
-
-    # Build & Push (AWS)
-    - name: Build and push Frontend to ECR
+    - name: Build Frontend Image
       uses: docker/build-push-action@v5
       with:
         context: ./frontend
-        push: true
-        tags: |
-          ${{ steps.login-ecr.outputs.registry }}/devops-frontend:${{ github.sha }}
-          ${{ steps.login-ecr.outputs.registry }}/devops-frontend:dev
-
-
-    - name: Build and push Frontend to GCR
-      if: env.GCP_PROJECT_ID != ''
-      uses: docker/build-push-action@v5
-      with:
-        context: ./frontend
-        push: true
-        tags: |
-          gcr.io/${{ secrets.GCP_PROJECT_ID }}/devops-frontend:${{ github.sha }}
-          gcr.io/${{ secrets.GCP_PROJECT_ID }}/devops-frontend:dev
+        push: false
+        tags: frontend:test
