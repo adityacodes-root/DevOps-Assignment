@@ -101,6 +101,11 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         
+      - name: Create Backend Bucket
+        run: |
+          gcloud storage buckets create gs://devops-assignment-tf-state --location=us-central1 || true
+        continue-on-error: true
+
       - name: Terraform Init GCP
         run: |
           cd terraform/gcp
