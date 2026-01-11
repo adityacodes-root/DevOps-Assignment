@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 
 describe('Home Snapshot', () => {
   it('matches snapshot', () => {
-    const { container } = render(<Home />)
+    const { container } = render(<Home apiBaseUrl="http://localhost:8000" />)
     expect(container).toMatchSnapshot()
   })
 })
