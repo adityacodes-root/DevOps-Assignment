@@ -18,6 +18,7 @@ A production-ready two-tier web application (Python FastAPI backend + Next.js fr
 |---------|-----|
 | Frontend | http://devops-alb-v2-1840220508.us-east-2.elb.amazonaws.com |
 | Backend API | http://devops-alb-v2-1840220508.us-east-2.elb.amazonaws.com/api/health |
+| Backend API | http://devops-alb-v2-1840220508.us-east-2.elb.amazonaws.com/api/message |
 
 ### GCP
 | Service | URL |
