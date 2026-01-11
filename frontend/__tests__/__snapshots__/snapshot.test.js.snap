@@ -3,49 +3,50 @@
 exports[`Home Snapshot matches snapshot 1`] = `
 <div>
   <div
-    class="jsx-e90fbafd28d468d container"
+    class="jsx-7beb89c88c7fe92c container"
   >
     <main
-      class="jsx-e90fbafd28d468d"
+      class="jsx-7beb89c88c7fe92c"
     >
       <h1
-        class="jsx-e90fbafd28d468d"
+        class="jsx-7beb89c88c7fe92c"
       >
         DevOps Assignment
       </h1>
       <div
-        class="jsx-e90fbafd28d468d status"
+        class="jsx-7beb89c88c7fe92c status"
       >
         <p
-          class="jsx-e90fbafd28d468d"
+          class="jsx-7beb89c88c7fe92c"
         >
           Status: 
           <span
-            class="jsx-e90fbafd28d468d error"
+            class="jsx-7beb89c88c7fe92c error"
           />
         </p>
       </div>
       <div
-        class="jsx-e90fbafd28d468d message-box"
+        class="jsx-7beb89c88c7fe92c message-box"
       >
         <h2
-          class="jsx-e90fbafd28d468d"
+          class="jsx-7beb89c88c7fe92c"
         >
           Backend Message:
         </h2>
         <p
-          class="jsx-e90fbafd28d468d"
+          class="jsx-7beb89c88c7fe92c"
         >
           Loading...
         </p>
       </div>
       <div
-        class="jsx-e90fbafd28d468d info"
+        class="jsx-7beb89c88c7fe92c info"
       >
         <p
-          class="jsx-e90fbafd28d468d"
+          class="jsx-7beb89c88c7fe92c"
         >
           Backend URL: 
+          http://localhost:8000
         </p>
       </div>
     </main>

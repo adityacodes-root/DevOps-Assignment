@@ -20,7 +20,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # --- AWS Login & Push ---
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -52,7 +51,6 @@ jobs:
           ${{ steps.login-ecr.outputs.registry }}/devops-frontend:${{ github.sha }}
           ${{ steps.login-ecr.outputs.registry }}/devops-frontend:latest
 
-    # --- GCP Login & Push ---
     - name: Google Auth
       uses: google-github-actions/auth@v2
       with:
@@ -100,7 +98,6 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # --- GCP Auth for Terraform (THIS WAS MISSING!) ---
       - name: Google Auth
         uses: google-github-actions/auth@v2
         with:
@@ -130,7 +127,6 @@ jobs:
           TF_VAR_database_secret: ${{ secrets.DATABASE_SECRET }}
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
-      # --- AWS Auth for Terraform ---
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
