@@ -38,12 +38,12 @@ export default function Home({ apiBaseUrl }) {
     <div className="container">
       <Head>
         <title>DevOps Assignment</title>
-        <meta name="description" content="DevOps Assignment with FastAPI and Next.js" />
+        <meta name="description" content="DevOps Project with FastAPI and Next.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <h1>DevOps Assignment</h1>
+        <h1>DevOps Project</h1>
         <div className="status">
           <p>Status: <span className={status.includes('connected') ? 'success' : 'error'}>{status}</span></p>
         </div>
