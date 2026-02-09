@@ -132,6 +132,14 @@ jobs:
           TF_VAR_database_secret: ${{ secrets.DATABASE_SECRET }}
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
+      - name: Force Redeploy Cloud Run Services
+        run: |
+          gcloud run services update-traffic devops-frontend-v5 --to-revisions LATEST=100 --region us-central1 --project ${{ secrets.GCP_PROJECT_ID }}
+          gcloud run services update-traffic devops-backend-v5 --to-revisions LATEST=100 --region us-central1 --project ${{ secrets.GCP_PROJECT_ID }}
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+        continue-on-error: true
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -149,6 +157,14 @@ jobs:
           cd terraform/aws
           terraform init
           
+      - name: Force Redeploy ECS Services
+        run: |
+          aws ecs update-service --cluster devops-cluster --service devops-frontend-service-v2 --force-new-deployment --region ${{ env.AWS_REGION }}
+          aws ecs update-service --cluster devops-cluster --service devops-backend-service-v2 --force-new-deployment --region ${{ env.AWS_REGION }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
           
       - name: Terraform Apply AWS
         run: |
@@ -160,12 +176,3 @@ jobs:
           TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Force Redeploy ECS Services
-        run: |
-          aws ecs update-service --cluster devops-cluster --service devops-frontend-service-v2 --force-new-deployment --region ${{ env.AWS_REGION }}
-          aws ecs update-service --cluster devops-cluster --service devops-backend-service-v2 --force-new-deployment --region ${{ env.AWS_REGION }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
